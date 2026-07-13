@@ -161,6 +161,20 @@ function switchSection(name) {
     sec.classList.toggle('active', sec.id === `section-${name}`);
   });
 
+  // Update header title dynamically
+  const titles = {
+    voices: 'Voice Files',
+    training: 'Training',
+    generate: 'Generate Speech',
+    samples: 'Samples',
+    docs: 'Documentation',
+    settings: 'Settings'
+  };
+  const titleEl = document.getElementById('main-header-title');
+  if (titleEl && titles[name]) {
+    titleEl.textContent = titles[name];
+  }
+
   if (name === 'voices') loadVoices();
   if (name === 'training') { loadVoicesForTraining(); loadStylesForTraining(); }
   if (name === 'generate') loadStylesForGenerate();
@@ -411,6 +425,11 @@ async function pollTrainingStatus() {
       el.scrollTop = el.scrollHeight;
     }
 
+    const downloadBtn = document.getElementById('download-train-btn');
+    if (downloadBtn) {
+      downloadBtn.style.display = data.has_output ? 'inline-flex' : 'none';
+    }
+
     if (['completed', 'error', 'stopped', 'idle'].includes(data.status)) {
       stopLogPolling();
       document.getElementById('start-train-btn').disabled = false;
@@ -419,6 +438,18 @@ async function pollTrainingStatus() {
       else if (data.status === 'error') showToast('Training ended with errors', 'error');
     }
   } catch (e) { /* silent */ }
+}
+
+function downloadTrainedStyle() {
+  const name = document.getElementById('train-name').value.trim();
+  if (!name) return;
+  const url = getApiBaseUrl() + `/api/styles/${name}/download`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${name}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 function updateTrainingBadge(status, elapsed) {

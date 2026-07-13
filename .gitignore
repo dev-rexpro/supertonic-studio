@@ -5,7 +5,7 @@ __pycache__/
 *.pyd
 
 # folders
-supertonic3
+# supertonic3
 
 # vs code
 .vscode/

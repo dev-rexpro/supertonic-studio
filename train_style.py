@@ -86,7 +86,7 @@ def main():
     # Use the first text as a reference for latent length and style extraction
     tmp_input_ids, tmp_attention_mask = next(data_iter)
     # voice style
-    tmp_voice = "M1.json" if gender == "M" else "F4.json"
+    tmp_voice = "David.json" if gender == "M" else "Emily.json"
     tmp_voice_path = f"supertonic3/voice_styles/{tmp_voice}"
     tmp_ttl, tmp_dp = load_voice_style(tmp_voice_path) # (1, 50, 256), (1, 8, 16)
     

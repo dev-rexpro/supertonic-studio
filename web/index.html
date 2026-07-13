@@ -117,7 +117,7 @@
         <!-- Main Area Header -->
         <header class="main-header">
           <div class="header-left">
-            <span class="main-header-title">Supertonic Studio · Voice Clone Studio</span>
+            <span class="main-header-title" id="main-header-title">Voices</span>
           </div>
           <div class="header-right">
             <div class="theme-toggle">
@@ -158,7 +158,6 @@
           <!-- ──── VOICES ──── -->
           <section id="section-voices" class="section active">
             <div class="section-header">
-              <h2>Voice Files</h2>
               <p>Upload and manage target voice audio files for training</p>
             </div>
 
@@ -204,7 +203,6 @@
           <!-- ──── TRAINING ──── -->
           <section id="section-training" class="section">
             <div class="section-header">
-              <h2>Training</h2>
               <p>Configure and run voice style optimization</p>
             </div>
 
@@ -297,6 +295,10 @@
                     </svg>
                     Stop
                   </button>
+                  <button id="download-train-btn" class="btn btn-secondary" onclick="downloadTrainedStyle()" style="display: none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    Download Style
+                  </button>
                 </div>
               </div>
 
@@ -316,7 +318,6 @@
           <!-- ──── GENERATE ──── -->
           <section id="section-generate" class="section">
             <div class="section-header">
-              <h2>Generate Speech</h2>
               <p>Synthesize speech using a trained or built-in voice style</p>
             </div>
 
@@ -422,7 +423,6 @@
           <!-- ──── SAMPLES ──── -->
           <section id="section-samples" class="section">
             <div class="section-header">
-              <h2>Samples</h2>
               <p>Browse and manage generated audio samples</p>
             </div>
             <div class="card">
@@ -453,7 +453,6 @@
           <!-- ──── DOCUMENTATION ──── -->
           <section id="section-docs" class="section">
             <div class="section-header">
-              <h2>Documentation</h2>
               <p>Complete guide to using Supertonic3 Voice Clone Studio</p>
             </div>
 
@@ -696,7 +695,6 @@ python generate.py --text "Hello world" --style logs/my-voice/my-voice.json</pre
           <!-- ──── SETTINGS ──── -->
           <section id="section-settings" class="section">
             <div class="section-header">
-              <h2>Settings</h2>
               <p>Configure backend API server and connection preferences</p>
             </div>
 

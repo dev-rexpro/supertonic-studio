@@ -38,11 +38,11 @@ A comprehensive Web GUI Studio and script interface to optimize and extract voic
 For fast GPU-accelerated style extraction without local GPU requirements:
 1. Open the notebook [supertonic_studio.ipynb](supertonic_studio.ipynb) in Google Colab.
 2. Ensure the Colab Runtime is set to **T4 GPU** (*Runtime -> Change runtime type -> T4 GPU*).
-3. Upload your `supertonic3.zip` project file to your Google Drive.
-4. Run all cells. Under Section 4, a public **Ngrok** URL will appear (e.g. `https://xxxx.ngrok-free.app`).
+3. Run the cells. The notebook will automatically clone the repository from GitHub.
+4. Under Section 4, a public **Ngrok** URL will appear (e.g. `https://xxxx.ngrok-free.app`).
 5. Open that link to launch the Studio. You can upload voices, run training, and generate audio on Colab's GPU.
 6. Once training completes, download the generated style `.json` file directly from the Colab file manager pane at:
-   `/content/project/logs/<voice_name>/<voice_name>.json`
+   `/content/supertonic-studio/logs/<voice_name>/<voice_name>.json` or download it using the **Download Style** button in the Web UI.
 
 ---
 

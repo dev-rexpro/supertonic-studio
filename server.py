@@ -311,13 +311,29 @@ async def get_training_status(since: int = Query(0)):
         if training_state.start_time and training_state.status == "running":
             elapsed = time.time() - training_state.start_time
 
+        has_output = False
+        if training_state.config and "name" in training_state.config:
+            name = training_state.config["name"]
+            path = os.path.join(BASE_DIR, "logs", name, f"{name}.json")
+            has_output = os.path.exists(path)
+
         return {
             "status": training_state.status,
             "logs": training_state.logs[since:],
             "total_logs": len(training_state.logs),
             "config": training_state.config,
             "elapsed": elapsed,
+            "has_output": has_output,
         }
+
+
+@app.get("/api/styles/{name}/download")
+async def download_style(name: str):
+    name = os.path.basename(name)
+    filepath = os.path.join(BASE_DIR, "logs", name, f"{name}.json")
+    if not os.path.exists(filepath):
+        raise HTTPException(404, f"Style JSON not found for {name}")
+    return FileResponse(filepath, media_type="application/json", filename=f"{name}.json")
 
 
 @app.post("/api/train/stop")
