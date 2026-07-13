@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supertonic Studio — Voice Clone Studio</title>
+  <meta name="description" content="Web GUI for Supertonic3 voice cloning and fine-tuning" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🎙</text></svg>">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- ════════ BODY ════════ -->
+    <div class="app-body">
+
+      <!-- ════════ SIDEBAR (Floating Card) ════════ -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo-wrapper" onclick="handleLogoClick()" title="Expand sidebar">
+            <div class="sidebar-logo">
+              <div class="logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M2 10v3" />
+                  <path d="M6 6v11" />
+                  <path d="M10 3v18" />
+                  <path d="M14 8v7" />
+                  <path d="M18 5v13" />
+                  <path d="M22 10v3" />
+                </svg>
+              </div>
+              <div class="logo-text">
+                <h1>Supertonic Studio</h1>
+                <p>Voice Clone Studio</p>
+              </div>
+            </div>
+            <div class="logo-hover-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-icon sidebar-close-btn" onclick="toggleSidebar()" title="Collapse sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-section="voices" onclick="switchSection('voices')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" x2="12" y1="19" y2="22" />
+            </svg>
+            <span class="nav-text">Voices</span>
+          </button>
+          <button class="nav-item" data-section="training" onclick="switchSection('training')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            <span class="nav-text">Training</span>
+          </button>
+          <button class="nav-item" data-section="generate" onclick="switchSection('generate')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+            <span class="nav-text">Generate</span>
+          </button>
+          <button class="nav-item" data-section="samples" onclick="switchSection('samples')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+            <span class="nav-text">Samples</span>
+          </button>
+          <button class="nav-item" data-section="docs" onclick="switchSection('docs')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+            </svg>
+            <span class="nav-text">Documentation</span>
+          </button>
+          <button class="nav-item" data-section="settings" onclick="switchSection('settings')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            <span class="nav-text">Settings</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">v1.0 · Supertonic Studio</div>
+      </aside>
+
+      <!-- ════════ MAIN CONTENT AREA ════════ -->
+      <div class="main-area">
+        <!-- Main Area Header -->
+        <header class="main-header">
+          <div class="header-left">
+            <span class="main-header-title">Supertonic Studio · Voice Clone Studio</span>
+          </div>
+          <div class="header-right">
+            <div class="theme-toggle">
+              <button class="theme-btn" data-theme="light" onclick="setTheme('light')" title="Light mode">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2" />
+                  <path d="M12 20v2" />
+                  <path d="m4.93 4.93 1.41 1.41" />
+                  <path d="m17.66 17.66 1.41 1.41" />
+                  <path d="M2 12h2" />
+                  <path d="M20 12h2" />
+                  <path d="m6.34 17.66-1.41 1.41" />
+                  <path d="m19.07 4.93-1.41 1.41" />
+                </svg>
+              </button>
+              <button class="theme-btn" data-theme="system" onclick="setTheme('system')" title="System preference">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" />
+                  <line x1="8" y1="21" x2="16" y2="21" />
+                  <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+              </button>
+              <button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')" title="Dark mode">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="main-content">
+
+          <!-- ──── VOICES ──── -->
+          <section id="section-voices" class="section active">
+            <div class="section-header">
+              <h2>Voice Files</h2>
+              <p>Upload and manage target voice audio files for training</p>
+            </div>
+
+            <div class="upload-zone" id="upload-zone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" x2="12" y1="3" y2="15" />
+              </svg>
+              <p>Drag &amp; drop audio files here</p>
+              <p class="upload-hint">WAV, MP3, FLAC, OGG &middot; click to browse</p>
+              <input type="file" id="voice-file-input" accept=".wav,.mp3,.flac,.ogg" multiple />
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3>Uploaded Voices</h3>
+                <button class="btn btn-ghost btn-sm" onclick="loadVoices()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                    <path d="M16 16h5v5" />
+                  </svg>
+                  Refresh
+                </button>
+              </div>
+              <div id="voices-list" class="items-list">
+                <div class="empty-state">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" x2="12" y1="19" y2="22" />
+                  </svg>
+                  <p>No voice files uploaded yet</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ──── TRAINING ──── -->
+          <section id="section-training" class="section">
+            <div class="section-header">
+              <h2>Training</h2>
+              <p>Configure and run voice style optimization</p>
+            </div>
+
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Configuration</h3>
+                </div>
+                <div class="card-content">
+                  <div class="form-grid" style="margin-bottom:1rem">
+                    <div class="form-group">
+                      <label class="form-label">Name</label>
+                      <input type="text" id="train-name" class="form-input" value="mb4" placeholder="Output name" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Gender</label>
+                      <div class="toggle-group">
+                        <button type="button" class="toggle-btn active" data-value="M"
+                          onclick="setGender(this)">Male</button>
+                        <button type="button" class="toggle-btn" data-value="F"
+                          onclick="setGender(this)">Female</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-grid" style="margin-bottom:1rem">
+                    <div class="form-group">
+                      <label class="form-label">Target Voice</label>
+                      <select id="train-target" class="form-select"></select>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Reference Style</label>
+                      <select id="train-reference" class="form-select">
+                        <option value="auto">Auto (find best match)</option>
+                        <option value="none">None (random init)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="separator"></div>
+                  <div class="form-grid" style="margin-bottom:1rem">
+                    <div class="form-group">
+                      <label class="form-label">Seed</label>
+                      <input type="number" id="train-seed" class="form-input" value="49" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Speed</label>
+                      <div class="form-range-wrap">
+                        <input type="range" id="train-speed" class="form-range" min="0.5" max="2.0" step="0.05"
+                          value="1.05" oninput="document.getElementById('train-speed-val').textContent=this.value" />
+                        <span id="train-speed-val" class="form-range-value">1.05</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-grid" style="margin-bottom:1rem">
+                    <div class="form-group">
+                      <label class="form-label">Training Steps</label>
+                      <input type="number" id="train-steps" class="form-input" value="3000" min="100" step="100" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Learning Rate</label>
+                      <input type="number" id="train-lr" class="form-input" value="0.0002" step="0.0001" />
+                    </div>
+                  </div>
+                  <div class="form-grid" style="margin-bottom:1rem">
+                    <div class="form-group">
+                      <label class="form-label">Vocoder Steps</label>
+                      <input type="number" id="train-vocoder" class="form-input" value="6" min="1" max="20" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Save Every N Steps</label>
+                      <input type="number" id="train-save" class="form-input" value="500" min="50" step="50" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Early Stop Threshold</label>
+                    <input type="number" id="train-threshold" class="form-input" value="0.015" step="0.001"
+                      style="max-width:calc(50% - 0.5rem)" />
+                    <span class="form-hint">Training stops when loss drops below this value</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button id="start-train-btn" class="btn btn-primary" onclick="startTraining()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                    Start Training
+                  </button>
+                  <button id="stop-train-btn" class="btn btn-destructive" onclick="stopTraining()" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="6" y="6" width="12" height="12" rx="1" />
+                    </svg>
+                    Stop
+                  </button>
+                </div>
+              </div>
+
+              <div class="card" style="display:flex;flex-direction:column">
+                <div class="card-header">
+                  <h3>Training Logs</h3>
+                  <span id="training-badge" class="badge badge-idle"><span class="badge-dot"></span><span
+                      id="training-badge-text">Idle</span></span>
+                </div>
+                <div class="card-content" style="flex:1;display:flex;flex-direction:column">
+                  <div id="training-logs" class="terminal" style="flex:1">Waiting for training to start...</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ──── GENERATE ──── -->
+          <section id="section-generate" class="section">
+            <div class="section-header">
+              <h2>Generate Speech</h2>
+              <p>Synthesize speech using a trained or built-in voice style</p>
+            </div>
+
+            <div class="grid-2-wide">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Input</h3>
+                </div>
+                <div class="card-content">
+                  <div class="form-group" style="margin-bottom:1rem">
+                    <label class="form-label">Text</label>
+                    <textarea id="gen-text" class="form-textarea" rows="5"
+                      placeholder="Enter text to synthesize...">Hello, this is a voice clone test. The quick brown fox jumps over the lazy dog.</textarea>
+                  </div>
+                  <div class="form-grid" style="margin-bottom:1rem">
+                    <div class="form-group">
+                      <label class="form-label">Language</label>
+                      <select id="gen-lang" class="form-select">
+                        <option value="en">English</option>
+                        <option value="ko">Korean</option>
+                        <option value="ja">Japanese</option>
+                        <option value="id">Indonesian</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="nl">Dutch</option>
+                        <option value="ru">Russian</option>
+                        <option value="ar">Arabic</option>
+                        <option value="hi">Hindi</option>
+                        <option value="tr">Turkish</option>
+                        <option value="pl">Polish</option>
+                        <option value="sv">Swedish</option>
+                        <option value="da">Danish</option>
+                        <option value="fi">Finnish</option>
+                        <option value="vi">Vietnamese</option>
+                        <option value="uk">Ukrainian</option>
+                        <option value="el">Greek</option>
+                        <option value="cs">Czech</option>
+                        <option value="ro">Romanian</option>
+                        <option value="hu">Hungarian</option>
+                        <option value="bg">Bulgarian</option>
+                        <option value="hr">Croatian</option>
+                        <option value="sk">Slovak</option>
+                        <option value="sl">Slovenian</option>
+                        <option value="et">Estonian</option>
+                        <option value="lt">Lithuanian</option>
+                        <option value="lv">Latvian</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Voice Style</label>
+                      <select id="gen-style" class="form-select"></select>
+                    </div>
+                  </div>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label class="form-label">Speed</label>
+                      <div class="form-range-wrap">
+                        <input type="range" id="gen-speed" class="form-range" min="0.5" max="2.0" step="0.05"
+                          value="1.05" oninput="document.getElementById('gen-speed-val').textContent=this.value" />
+                        <span id="gen-speed-val" class="form-range-value">1.05</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Vocoder Steps</label>
+                      <input type="number" id="gen-steps" class="form-input" value="6" min="1" max="20" />
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button id="generate-btn" class="btn btn-primary" onclick="generateSpeech()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    </svg>
+                    Generate
+                  </button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h3>Result</h3>
+                </div>
+                <div class="card-content">
+                  <div id="generate-result">
+                    <div class="empty-state">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                      </svg>
+                      <p>Generated audio will appear here</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ──── SAMPLES ──── -->
+          <section id="section-samples" class="section">
+            <div class="section-header">
+              <h2>Samples</h2>
+              <p>Browse and manage generated audio samples</p>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Generated Samples</h3>
+                <button class="btn btn-ghost btn-sm" onclick="loadSamples()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                    <path d="M16 16h5v5" />
+                  </svg>
+                  Refresh
+                </button>
+              </div>
+              <div id="samples-list" class="items-list">
+                <div class="empty-state">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                  </svg>
+                  <p>No generated samples yet</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ──── DOCUMENTATION ──── -->
+          <section id="section-docs" class="section">
+            <div class="section-header">
+              <h2>Documentation</h2>
+              <p>Complete guide to using Supertonic3 Voice Clone Studio</p>
+            </div>
+
+            <div class="docs-flow">
+
+              <!-- Getting Started -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>🚀 Getting Started</h3>
+                </div>
+                <div class="card-content">
+                  <p>Supertonic3 Voice Clone Studio lets you clone any voice through a simple three-step workflow:</p>
+                  <ol>
+                    <li><strong>Upload</strong> — Add a target voice audio file (WAV recommended, 10–60 seconds of clean
+                      speech)</li>
+                    <li><strong>Train</strong> — Run voice style optimization to learn the speaker's characteristics
+                    </li>
+                    <li><strong>Generate</strong> — Synthesize new speech with the cloned voice using any text</li>
+                  </ol>
+                  <div class="docs-callout tip">
+                    <strong>💡 Tip:</strong> For best results, use a clean recording with minimal background noise.
+                    Longer recordings (30–60s) generally produce better voice clones.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Voices -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>🎙 Voices</h3>
+                </div>
+                <div class="card-content">
+                  <p>The <strong>Voices</strong> section is where you upload and manage the target audio files used for
+                    training.</p>
+                  <p><strong>How to upload:</strong></p>
+                  <ul>
+                    <li>Drag &amp; drop audio files onto the upload zone, or click to browse</li>
+                    <li>Supported formats: <code>.wav</code>, <code>.mp3</code>, <code>.flac</code>, <code>.ogg</code>
+                    </li>
+                    <li>You can upload multiple files at once</li>
+                  </ul>
+                  <p><strong>Managing voices:</strong></p>
+                  <ul>
+                    <li>Use the built-in audio player to preview each uploaded file</li>
+                    <li>Click the trash icon to delete a voice file</li>
+                    <li>Voice files are stored in the <code>voices/</code> directory</li>
+                  </ul>
+                  <div class="docs-callout info">
+                    <strong>ℹ️ Recommended:</strong> Use mono WAV files at 44.1 kHz sample rate for optimal quality.
+                    Keep recordings between 10–60 seconds of continuous speech.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Training -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>⚡ Training</h3>
+                </div>
+                <div class="card-content">
+                  <p>The <strong>Training</strong> section configures and runs voice style optimization. This process
+                    learns a style vector that captures the speaker's voice characteristics.</p>
+
+                  <p><strong>Workflow:</strong></p>
+                  <ol>
+                    <li>Select a <strong>Target Voice</strong> from your uploaded files</li>
+                    <li>Set <strong>Gender</strong> to match the target speaker (important for initial reference style)
+                    </li>
+                    <li>Adjust training parameters as needed (defaults work well for most cases)</li>
+                    <li>Click <strong>Start Training</strong> and monitor progress in the log panel</li>
+                    <li>Training saves checkpoints every N steps and a final style when complete</li>
+                  </ol>
+
+                  <p><strong>Parameters reference:</strong></p>
+                  <table class="docs-table">
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Name</td>
+                        <td>mb4</td>
+                        <td>Output name for logs and saved style files</td>
+                      </tr>
+                      <tr>
+                        <td>Gender</td>
+                        <td>Male</td>
+                        <td>Voice gender — selects the initial reference style (M → Male styles, F → Female styles)</td>
+                      </tr>
+                      <tr>
+                        <td>Target Voice</td>
+                        <td>—</td>
+                        <td>The uploaded audio file to clone</td>
+                      </tr>
+                      <tr>
+                        <td>Reference Style</td>
+                        <td>Auto</td>
+                        <td><strong>Auto</strong> finds the closest built-in style. <strong>None</strong> starts from
+                          random. Or pick a specific style.</td>
+                      </tr>
+                      <tr>
+                        <td>Seed</td>
+                        <td>49</td>
+                        <td>Random seed for reproducibility</td>
+                      </tr>
+                      <tr>
+                        <td>Speed</td>
+                        <td>1.05</td>
+                        <td>Speech speed multiplier during training (1.0 = natural speed)</td>
+                      </tr>
+                      <tr>
+                        <td>Training Steps</td>
+                        <td>3000</td>
+                        <td>Maximum number of optimization steps</td>
+                      </tr>
+                      <tr>
+                        <td>Learning Rate</td>
+                        <td>0.0002</td>
+                        <td>Optimizer learning rate (lower = more stable, slower)</td>
+                      </tr>
+                      <tr>
+                        <td>Vocoder Steps</td>
+                        <td>6</td>
+                        <td>Number of denoising steps in the vocoder during evaluation</td>
+                      </tr>
+                      <tr>
+                        <td>Save Every</td>
+                        <td>500</td>
+                        <td>Save a checkpoint every N optimization steps</td>
+                      </tr>
+                      <tr>
+                        <td>Early Stop</td>
+                        <td>0.015</td>
+                        <td>Stop training when loss drops below this threshold</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div class="docs-callout warning">
+                    <strong>⚠️ GPU Recommended:</strong> Training uses PyTorch and is significantly faster with a
+                    CUDA-capable GPU. CPU training works but may take 30+ minutes.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Generate -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>🔊 Generate Speech</h3>
+                </div>
+                <div class="card-content">
+                  <p>The <strong>Generate</strong> section lets you synthesize new speech using any trained or built-in
+                    voice style.</p>
+                  <p><strong>How to generate:</strong></p>
+                  <ol>
+                    <li>Enter the text you want to synthesize</li>
+                    <li>Select the <strong>Language</strong> matching your text (31 languages supported)</li>
+                    <li>Pick a <strong>Voice Style</strong> — built-in styles are marked with 🔹, trained styles with ✅
+                    </li>
+                    <li>Adjust <strong>Speed</strong> and <strong>Vocoder Steps</strong> if desired</li>
+                    <li>Click <strong>Generate</strong> and wait for the result</li>
+                  </ol>
+                  <div class="docs-callout tip">
+                    <strong>💡 Tips:</strong>
+                    <ul style="margin-top:0.25rem;margin-bottom:0">
+                      <li>The first generation takes longer because TTS models need to load into memory</li>
+                      <li>Higher vocoder steps (8–10) produce better quality but take longer</li>
+                      <li>Speed 1.0 = natural pace. Use 0.8–0.9 for slower, deliberate speech</li>
+                      <li>Generated audio is automatically saved to the <strong>Samples</strong> section</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Samples -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>📁 Samples</h3>
+                </div>
+                <div class="card-content">
+                  <p>The <strong>Samples</strong> section displays all generated audio files. Files are sorted newest
+                    first.</p>
+                  <ul>
+                    <li>Play any sample using the built-in audio player</li>
+                    <li>Delete samples you no longer need with the trash icon</li>
+                    <li>Sample filenames include the voice style name and a Unix timestamp</li>
+                    <li>Files are stored in the <code>samples/</code> directory</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Tips -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>💡 Tips &amp; Best Practices</h3>
+                </div>
+                <div class="card-content">
+                  <p><strong>Audio quality:</strong></p>
+                  <ul>
+                    <li>Use clean recordings with minimal background noise</li>
+                    <li>Avoid music, multiple speakers, or heavy reverb</li>
+                    <li>44.1 kHz mono WAV is the ideal format</li>
+                    <li>10–60 seconds of continuous speech works best</li>
+                  </ul>
+
+                  <p><strong>Training:</strong></p>
+                  <ul>
+                    <li>Start with default settings — they work well in most cases</li>
+                    <li>Watch the loss in the training log: lower = better speaker match</li>
+                    <li>If loss plateaus high (> 0.1), try a different seed or reference style</li>
+                    <li>Use checkpoints (e.g., <code>_1000.json</code>, <code>_2000.json</code>) to compare quality at
+                      different stages</li>
+                    <li>Make sure <strong>Gender</strong> matches the target speaker</li>
+                  </ul>
+
+                  <p><strong>Troubleshooting:</strong></p>
+                  <ul>
+                    <li><strong>Output sounds wrong gender</strong> — Check Gender setting matches the target speaker
+                    </li>
+                    <li><strong>Training too slow</strong> — Use a CUDA GPU if available. Reduce steps to 1500 for quick
+                      tests</li>
+                    <li><strong>Generation fails</strong> — Ensure the style JSON file exists and is valid</li>
+                    <li><strong>Audio artifacts</strong> — Try increasing vocoder steps to 8–10</li>
+                  </ul>
+
+                  <p><strong>CLI alternative:</strong></p>
+                  <pre>python train_style.py --name my-voice --gender M --target-wav-path voices/my-voice.wav --num-steps 3000
+
+python generate.py --text "Hello world" --style logs/my-voice/my-voice.json</pre>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ──── SETTINGS ──── -->
+          <section id="section-settings" class="section">
+            <div class="section-header">
+              <h2>Settings</h2>
+              <p>Configure backend API server and connection preferences</p>
+            </div>
+
+            <div class="card" style="max-width: 600px;">
+              <div class="card-header">
+                <h3>Backend Server Settings</h3>
+              </div>
+              <div class="card-content">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label class="form-label">Connection Mode</label>
+                  <div class="toggle-group" style="width: 100%; display: flex;">
+                    <button type="button" class="toggle-btn active" style="flex: 1;" id="btn-backend-local"
+                      onclick="selectBackendMode('local')">Local Server</button>
+                    <button type="button" class="toggle-btn" style="flex: 1;" id="btn-backend-cloud"
+                      onclick="selectBackendMode('cloud')">Cloud Server</button>
+                  </div>
+                  <span class="form-hint">Choose "Local Server" to connect to the backend running locally on this
+                    machine. Select "Cloud Server" to connect to a custom deployed remote FastAPI instance.</span>
+                </div>
+
+                <div class="form-group" id="endpoint-group" style="margin-bottom: 1.5rem;">
+                  <label class="form-label">Server Endpoint URL</label>
+                  <input type="text" id="setting-endpoint" class="form-input" placeholder="http://localhost:8000" />
+                  <span class="form-hint" id="endpoint-hint">Enter the full API base URL (e.g.
+                    <code>http://localhost:8000</code> or <code>https://my-remote-server.com</code>)</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-primary" onclick="saveBackendSettings()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                  </svg>
+                  Save Settings
+                </button>
+                <button class="btn btn-secondary" onclick="testBackendConnection()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  Test Connection
+                </button>
+              </div>
+            </div>
+          </section>
+
+        </main>
+      </div><!-- /main-area -->
+    </div><!-- /app-body -->
+  </div><!-- /app -->
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="/app.js"></script>
+</body>
+
+</html>
